@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>frontend-app</title>
+  </head>
+    <script>
+      // runtime CSS loader: try to fetch built CSS and inject as inline style quickly
+      (function(){
+        try {
+          var links = Array.from(document.getElementsByTagName('link')).map(function(l){return l.href});
+          // attempt common built filename
+          var href = './assets/index-';
+          // create a synchronous XHR fetch (blocking) to ensure CSS is available before React mounts
+          var xhr = new XMLHttpRequest();
+          xhr.open('GET', href + '*.css', false);
+          xhr.send(null);
+          if (xhr.status === 200 && xhr.responseText) {
+            var style = document.createElement('style');
+            style.id = 'inline-build-css';
+            style.innerHTML = xhr.responseText;
+            document.head.appendChild(style);
+          }
+        } catch(e) {
+          // ignore — fallback components handle loading
+        }
+      })();
+    </script>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
